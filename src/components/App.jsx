@@ -1,47 +1,26 @@
 import React, { Component } from 'react';
-
-import getGallery from '../api/gallery.js';
-// import Loader from './Loader/Loader';
-// import Searchbar from './Searchbar/Searchbar';
-// import ImageGalleryItem from './ImageGalleryItem/ImageGalleryItem';
+//import Loader from './Loader/Loader';
+//import Searchbar from './Searchbar/Searchbar';
+import ImageGalleryItem from './ImageGalleryItem/ImageGalleryItem.jsx';
 // import ImageGallery from './ImageGallery/ImageGallery';
-//import axios from 'axios';
-// import Button from './Button/Button';
-// import Modal from './Modal/Modal';
-
-// class App extends Component {
-//   onSubmit = () => {};
-
-//   render() {
-//     return (
-//       <div>
-//         <Loader />
-//         {/* <Searchbar onSubmit={onSubmit} /> */}
-//         <ImageGalleryItem />
-//         <ImageGallery />
-//         <Button />
-//         <Modal />
-//       </div>
-//     );
-//   }
-// }
-
-// export default App;
+//import Button from './Button/Button';
+//import Modal from './Modal/Modal';
 
 class App extends Component {
-  async componentDidMount() {
-   const data = await getGallery()
-   console.log(data);
- }
+  //onSubmit = () => {};
 
+  render() {
+    return (
+      <div>
+        {/* <Loader /> */}
+        {/* <Searchbar onSubmit={onSubmit} /> */}
+        <ImageGalleryItem />
+        {/* <ImageGallery /> */}
+        {/* <Button /> */}
+        {/* <Modal /> */}
+      </div>
+    );
+  }
+}
 
-   render() {
-     return (
-       <div>
-       work
-       </div>
-     );
-   }
- }
-
- export default App;
+export default App;
