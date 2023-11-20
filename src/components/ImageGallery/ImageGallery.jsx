@@ -1,10 +1,10 @@
 //Компонент элемента списка с изображением. Создает DOM-элемент следующей структуры.
-const ImageGallery = ({card}) => {
-
-  <li className="gallery-item">
-  <img src={card.webformatURL} alt={card.tags} />
-</li>
-
+const ImageGallery = ({ card }) => {
+  return (
+    <ul className="gallery">
+  {card}
+</ul>
+  );
 };
 
-export default ImageGallery
+export default ImageGallery;
