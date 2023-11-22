@@ -1,15 +1,43 @@
-//При клике по элементу галереи должно открываться модальное окно с темным оверлеем и отображаться большая версия 
-//изображения. Модальное окно должно закрываться по нажатию клавиши ESC или по клику на оверлее.
+import { createPortal } from 'react-dom';
+import { Component } from 'react';
+import css from './Modal.module.css';
 
-//Внешний вид похож на функционал этого VanillaJS-плагина, только вместо белого модального окна рендерится 
-//изображение (в примере нажми Run). Анимацию делать не нужно!
+const modalRoot = document.querySelector('#modal-root');
 
-const Modal = () => {
-  <div className="overlay">
-  <div className="modal">
-    <img src="" alt="" />
-  </div>
-</div>
-};
+class Modal extends Component {
+  backdropCloseModal = event => {
+    console.log(event.target);
+    console.log(event.currentTarget);
+    if (event.target === event.currentTarget) {
+      this.props.closeModal();
+    }
+  };
 
-export default Modal
+  componentDidMount() {
+    window.addEventListener('keydown', this.handleKeyDown);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleKeyDown);
+  }
+
+  handleKeyDown = event => {
+    if (event.code === 'Escape') {
+      this.props.closeModal();
+    }
+  };
+
+  render() {
+    const { largeImage, tags } = this.props;
+    return createPortal(
+      <div className={css.overlay} onClick={this.backdropCloseModal}>
+        <div className={css.modal}>
+          <img src={largeImage} width="800" height="600" alt={tags} />
+        </div>
+      </div>,
+      modalRoot
+    );
+  }
+}
+
+export default Modal;

@@ -1,5 +1,5 @@
-const ErrorBackEnd = ({errorBackEnd}) => {
-return <h1>{errorBackEnd}</h1>
-}
+const ErrorBackEnd = ({ errorBackEnd }) => {
+  return <h1>{errorBackEnd}</h1>;
+};
 
-export default ErrorBackEnd
+export default ErrorBackEnd;

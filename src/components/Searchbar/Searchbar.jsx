@@ -1,14 +1,14 @@
-import { Component } from "react";
-//Компонент принимает один проп onSubmit - функцию для передачи значения инпута при сабмите формы. 
-//Создает DOM-элемент следующей структуры.
+import { Component } from 'react';
+import css from './Searchbar.module.css';
 
 class Searchbar extends Component {
   state = {
     name: '',
   };
+
   handleSubmit = e => {
     e.preventDefault();
-    this.props.onSubmit({search:this.state});
+    this.props.onSubmit({ search: this.state });
     this.setState({
       name: '',
     });
@@ -18,22 +18,26 @@ class Searchbar extends Component {
   };
   render() {
     return (
-<header className="searchbar">
-<form onSubmit={this.handleSubmit}>
-<input
-      className="input"
-      type="text"
-      autoComplete="off"
-      autoFocus
-      name="name"
-      value={this.state.name}
-      onChange={this.handleChange}
-      placeholder="Search images and photos"
-    />
-        <button type="submit" className="button">
-      <span className="button-label">Search</span>
-    </button>
-</form>
-</header>
-  )}}
+      <header className={css.searchbar}>
+        <form onSubmit={this.handleSubmit}>
+          <div className={css.container}>
+            <input
+              className={css.input}
+              type="text"
+              autoComplete="off"
+              autoFocus
+              name="name"
+              value={this.state.name}
+              onChange={this.handleChange}
+              placeholder="Search images and photos"
+            />
+            <button type="submit" className={css.button}>
+              <span className="button-label">Search</span>
+            </button>
+          </div>
+        </form>
+      </header>
+    );
+  }
+}
 export default Searchbar;

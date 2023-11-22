@@ -1,11 +1,15 @@
-//При нажатии на кнопку Load more должна догружаться следующая порция изображений и рендериться вместе с предыдущими. 
-//Кнопка должна рендерится только тогда, когда есть какие-то загруженные изобаржения. Если массив изображений пуст, 
-//кнопка не рендерится.
+import css from './Button.module.css';
 
-const Button = () => {
-return (
-  <button type="button">Load more</button>
-)
+const Button = ({ onLoadMore, hidden }) => {
+  return (
+    <button
+      className={`${css.button} ${hidden}`}
+      type="button"
+      onClick={() => onLoadMore()}
+    >
+      Load more
+    </button>
+  );
 };
 
-export default Button
+export default Button;

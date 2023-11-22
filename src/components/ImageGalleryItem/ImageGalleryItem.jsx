@@ -1,54 +1,23 @@
-import { Component } from 'react';
-import getGallery from '../../api/gallery.js';
 import ImageGallery from '../ImageGallery/ImageGallery.jsx';
-import Loader from '../Loader/Loader.jsx';
-import ErrorBackEnd from '../ErrorBackEnd/ErrorBackEnd.jsx';
+import css from './ImageGalleryItem.module.css';
 
-//Список карточек изображений. Создает DOM-элемент следующей структуры.
-//сюда должен прийти массив
-export class ImageGalleryItem extends Component {
-  state = {
-    isLoader: false,
-    errorBackEnd: '',
-    gallery: '',
-  };
-  componentDidMount() {
-    this.handleGallery();
-  }
+const ImageGalleryItem = ({ gallery, handleOpenModal }) => {
+  const galleryList = gallery.map(card => (
+    <li className={css.galleryItem} key={card.id}>
+      <button
+        className={css.galleryItemLink}
+        type="button"
+        onClick={() => handleOpenModal(card.largeImageURL, card.tags)}
+      >
+        <img
+          className={css.galleryItemImg}
+          src={card.webformatURL}
+          alt={card.tags}
+        />
+      </button>
+    </li>
+  ));
+  return <ImageGallery cards={galleryList} />;
+};
 
-  handleGallery = async () => {
-    try {
-      this.setState({ isLoader: true });
-      const data = await getGallery();
-      this.setState({ gallery: data.hits });
-    } catch (error) {
-      console.log(error);
-      this.setState({ errorBackEnd: error.message });
-    } finally {
-      this.setState({ isLoader: false });
-    }
-  };
-  render() {
-    console.log(this.state);
-    const { gallery, isLoader, errorBackEnd } = this.state;
-    return (
-      <>
-        {isLoader && <Loader />}
-        {errorBackEnd && <ErrorBackEnd errorBackEnd={errorBackEnd} />}
-        {gallery &&
-          gallery.map(card => <ImageGallery card={card} key={card.id} />)}
-      </>
-    );
-  }
-}
-
-//export default ImageGalleryItem;
-
-export const GalleryItem = ({gallery}) => {
-return gallery.map(card => (
-<ImageGallery card={<li className="gallery-item">
-  <img src={card.webformatURL} alt={card.tags} />
-</li>} key={card.id} />))
-}
-
-//export default GalleryItem
+export default ImageGalleryItem;

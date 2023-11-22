@@ -1,10 +1,7 @@
-//Компонент элемента списка с изображением. Создает DOM-элемент следующей структуры.
-const ImageGallery = ({ card }) => {
-  return (
-    <ul className="gallery">
-  {card}
-</ul>
-  );
+import css from './ImageGallery.module.css';
+
+const ImageGallery = ({ cards }) => {
+  return <ul className={css.gallery}>{cards}</ul>;
 };
 
 export default ImageGallery;

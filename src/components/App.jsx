@@ -1,51 +1,108 @@
 import React, { Component } from 'react';
 import Searchbar from './Searchbar/Searchbar';
-//import ImageGalleryItem from './ImageGalleryItem/ImageGalleryItem.jsx';
+import ImageGalleryItem from './ImageGalleryItem/ImageGalleryItem.jsx';
 import getGallery from '../api/gallery.js';
 import Button from './Button/Button';
 import Loader from './Loader/Loader.jsx';
 import ErrorBackEnd from './ErrorBackEnd/ErrorBackEnd.jsx';
-import { GalleryItem } from './ImageGalleryItem/ImageGalleryItem.jsx';
-//import Modal from './Modal/Modal';
+import Modal from './Modal/Modal';
+import css from './App.module.css';
 
 class App extends Component {
   state = {
     isLoader: false,
     errorBackEnd: '',
     gallery: '',
-   search: '',
+    search: '',
+    showModal: false,
+    modalImageUrl: '',
+    modalImageTags: '',
+    page: 1,
+    totalPage: 0,
+    loadMore: false,
   };
-  onSubmit = ({ search }) => {
-    console.log(search);
-    this.setState({ search });
-  };
+
   componentDidUpdate(_, prevState) {
-    if (prevState.search !== this.state.search) {
-      this.handleGallery();
+    const { search, page } = this.state;
+    if (prevState.search !== search || prevState.page !== page) {
+      this.handleGallery(search, page);
     }
   }
-  handleGallery = async () => {
+
+  onSubmit = ({ search }) => {
+    // if (this.state.page === this.state.totalPage)
+    // {this.setState(prev => ({ loadMore: (prev.loadMore = false) }))}
+    console.log(this.state.page);
+    console.log(this.state.totalPage);
+
+    this.setState({ search });
+  };
+
+  handleGallery = async (search, page) => {
     try {
       this.setState({ isLoader: true });
-      const data = await getGallery(this.state.search);
-      this.setState({ gallery: data.hits, error: '' });
-      console.log(this.state.gallery);
-      console.log(data.hits);
+      if (page === 1) {
+        this.setState({ gallery: [] });
+      }
+      const data = await getGallery(search, page);
+      this.setState(prev => ({
+        gallery: [...prev.gallery, ...data.hits],
+        totalPage: data.totalHits,
+        error: '',
+      }));
+      this.setState(console.log({ totalPage: data.totalHits }));
     } catch (error) {
       this.setState({ errorBackEnd: error.message });
     } finally {
       this.setState({ isLoader: false });
     }
   };
+
+  onLoadMore = () => {
+    this.setState(prev => ({ page: prev.page + 1 }));
+  };
+
+  handleOpenModal = (largeImageURL, tags) => {
+    this.setState({ showModal: true });
+    this.setState(prev => ({
+      modalImageUrl: (prev.modalImageUrl = largeImageURL),
+    }));
+    this.setState(prev => ({ modalImageTags: (prev.modalImageTags = tags) }));
+  };
+
+  handleCloseModal = () => {
+    this.setState({ showModal: false });
+  };
+
   render() {
+    const {
+      isLoader,
+      errorBackEnd,
+      gallery,
+      loadMore,
+      showModal,
+      modalImageUrl,
+      modalImageTags,
+    } = this.state;
     return (
-      <div>
-        {this.isLoader && <Loader />}
-        {this.errorBackEnd && <ErrorBackEnd errorBackEnd={this.errorBackEnd} />}
+      <div className={css.container}>
+        {isLoader && <Loader />}
+        {errorBackEnd && <ErrorBackEnd errorBackEnd={errorBackEnd} />}
         <Searchbar onSubmit={this.onSubmit} />
-        {this.state.gallery && <GalleryItem gallery={this.state.gallery} />}
-        <Button />
-        {/* <Modal /> */}
+        {gallery && (
+          <ImageGalleryItem
+            gallery={gallery}
+            handleOpenModal={this.handleOpenModal}
+          />
+        )}
+        {loadMore && <Button onLoadMore={this.onLoadMore} />}
+        {showModal && (
+          <Modal
+            closeModal={this.handleCloseModal}
+            largeImage={modalImageUrl}
+            tags={modalImageTags}
+          />
+        )}
       </div>
     );
   }
