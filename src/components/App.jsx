@@ -29,7 +29,7 @@ class App extends Component {
   }
 
   onSubmit = ({ search }) => {
-    this.setState({ search });
+    this.setState({ search, page: 1 });
   };
 
   handleGallery = async (search, page) => {
