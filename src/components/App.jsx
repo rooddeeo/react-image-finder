@@ -18,7 +18,6 @@ class App extends Component {
     modalImageUrl: '',
     modalImageTags: '',
     page: 1,
-    totalPage: 0,
     loadMore: false,
   };
 
@@ -30,11 +29,6 @@ class App extends Component {
   }
 
   onSubmit = ({ search }) => {
-    // if (this.state.page === this.state.totalPage)
-    // {this.setState(prev => ({ loadMore: (prev.loadMore = false) }))}
-    console.log(this.state.page);
-    console.log(this.state.totalPage);
-
     this.setState({ search });
   };
 
@@ -47,10 +41,9 @@ class App extends Component {
       const data = await getGallery(search, page);
       this.setState(prev => ({
         gallery: [...prev.gallery, ...data.hits],
-        totalPage: data.totalHits,
+        loadMore: page < Math.ceil(data.totalHits / 12),
         error: '',
       }));
-      this.setState(console.log({ totalPage: data.totalHits }));
     } catch (error) {
       this.setState({ errorBackEnd: error.message });
     } finally {
